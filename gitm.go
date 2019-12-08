@@ -5,7 +5,7 @@ import (
 
     "github.com/golang/protobuf/proto"
 
-    "./pb"
+    "gitm/pb"
 )
 
 func main() {
