@@ -1,4 +1,4 @@
-module gitm
+module github.com/wanabe/gitm
 
 go 1.13
 

@@ -1,5 +1,6 @@
 syntax = "proto3";
-package pb;
+package gitm.protobuf;
+option go_package = "github.com/wanabe/gitm/api/gitm";
 
 message Object {
     string hash = 1;

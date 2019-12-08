@@ -1,10 +1,10 @@
-SRC=gitm.go pb/gitm.pb.go
+SRC=cmd/gitm/main.go api/gitm/gitm.pb.go
 EXE=gitm
 
-all: gitm
+all: $(EXE)
 
-pb/%.pb.go: %.proto
-	protoc --go_out=pb $<
+api/gitm/%.pb.go: api/%.proto
+	protoc --go_out=${GOPATH}/src $<
 
-gitm: $(SRC)
-	go build
+gitm: cmd/gitm $(SRC)
+	go build ./$<
