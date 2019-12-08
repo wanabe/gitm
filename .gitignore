@@ -1,2 +1,5 @@
 /gitm
+/ruby/vendor
 go.sum
+.bundle
+Gemfile.lock
