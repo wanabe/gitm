@@ -1,0 +1,11 @@
+syntax = "proto3";
+package pb;
+
+message Object {
+    string hash = 1;
+}
+
+message Commit {
+    Object object = 1;
+    Object parent = 2;
+}
