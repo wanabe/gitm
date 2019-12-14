@@ -5,8 +5,9 @@ class LogServer < Gitm::Protobuf::Log::Service
     r, w = IO.pipe
     system("git", "log", "--format=%H %P", "-n1", obj["hash"], out: w)
     w.close
-    hash, parent_hash = r.read.chomp.split(/ +/)
-    return Gitm::Protobuf::Commit.new(object: Gitm::Protobuf::Object.new(hash: hash), parent: Gitm::Protobuf::Object.new(hash: parent_hash))
+    hashes = r.read.chomp.split(/ +/)
+    object, *parents = hashes.map { |hash| Gitm::Protobuf::Object.new(hash: hash) }
+    return Gitm::Protobuf::Commit.new(object: object, parents: parents)
   end
 end
 

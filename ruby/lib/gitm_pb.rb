@@ -10,7 +10,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     end
     add_message "gitm.protobuf.Commit" do
       optional :object, :message, 1, "gitm.protobuf.Object"
-      optional :parent, :message, 2, "gitm.protobuf.Object"
+      repeated :parents, :message, 2, "gitm.protobuf.Object"
     end
   end
 end

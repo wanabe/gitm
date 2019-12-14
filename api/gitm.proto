@@ -12,5 +12,5 @@ message Object {
 
 message Commit {
     Object object = 1;
-    Object parent = 2;
+    repeated Object parents = 2;
 }
