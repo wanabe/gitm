@@ -3,7 +3,7 @@ package gitm.protobuf;
 option go_package = "github.com/wanabe/gitm/api/gitm";
 
 service Log {
-  rpc get(LogInput) returns (Commit) {}
+  rpc get(LogRequest) returns (Commit) {}
 }
 
 message Object {
@@ -19,7 +19,7 @@ message Commit {
     repeated Object parents = 2;
 }
 
-message LogInput {
+message LogRequest {
     Repository repository = 1;
     Object object = 2;
 }

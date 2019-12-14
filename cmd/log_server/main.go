@@ -13,7 +13,7 @@ type server struct {
     pb.UnimplementedLogServer
 }
 
-func (s *server) Get(ctx context.Context, in *pb.LogInput) (*pb.Commit, error) {
+func (s *server) Get(ctx context.Context, in *pb.LogRequest) (*pb.Commit, error) {
     return &pb.Commit{}, nil
 }
 

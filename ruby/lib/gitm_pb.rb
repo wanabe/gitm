@@ -15,7 +15,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :object, :message, 1, "gitm.protobuf.Object"
       repeated :parents, :message, 2, "gitm.protobuf.Object"
     end
-    add_message "gitm.protobuf.LogInput" do
+    add_message "gitm.protobuf.LogRequest" do
       optional :repository, :message, 1, "gitm.protobuf.Repository"
       optional :object, :message, 2, "gitm.protobuf.Object"
     end
@@ -27,6 +27,6 @@ module Gitm
     Object = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.Object").msgclass
     Repository = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.Repository").msgclass
     Commit = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.Commit").msgclass
-    LogInput = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.LogInput").msgclass
+    LogRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.LogRequest").msgclass
   end
 end
