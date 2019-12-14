@@ -1,7 +1,7 @@
-SRC=cmd/gitm/main.go api/gitm/gitm.pb.go
-EXE=gitm
+SRC=cmd/gitm/main.go cmd/log_server/main.go api/gitm/gitm.pb.go
+CMDS=gitm log_server
 
-all: $(EXE)
+all: $(CMDS)
 
 .PHONY: refresh
 
@@ -11,6 +11,9 @@ api/gitm/%.pb.go: api/%.proto
 	protoc --go_out=plugins=grpc:${GOPATH}/src $<
 
 gitm: cmd/gitm $(SRC)
+	go build ./$<
+
+log_server: cmd/log_server $(SRC)
 	go build ./$<
 
 ruby/vendor:

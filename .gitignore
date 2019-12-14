@@ -1,4 +1,5 @@
 /gitm
+/log_server
 /ruby/vendor
 go.sum
 .bundle
