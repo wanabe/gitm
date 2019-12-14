@@ -1,9 +1,13 @@
 require "gitm"
 
 class LogServer < Gitm::Protobuf::Log::Service
-  def get(obj, _unused_call)
+  def get(input, _unused_call)
     r, w = IO.pipe
-    system("git", "log", "--format=%H %P", "-n1", obj["hash"], out: w)
+    repository = input["repository"]
+    if repository
+      dir_args = ["-C", input["repository"]["path"]]
+    end
+    system("git", *dir_args, "log", "--format=%H %P", "-n1", input["object"]["hash"], out: w)
     w.close
     hashes = r.read.chomp.split(/ +/)
     object, *parents = hashes.map { |hash| Gitm::Protobuf::Object.new(hash: hash) }
