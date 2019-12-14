@@ -8,7 +8,7 @@ all: $(EXE)
 refresh: api/gitm/gitm.pb.go ruby/lib/gitm/protobuf/gitm_pb.rb
 
 api/gitm/%.pb.go: api/%.proto
-	protoc --go_out=${GOPATH}/src $<
+	protoc --go_out=plugins=grpc:${GOPATH}/src $<
 
 gitm: cmd/gitm $(SRC)
 	go build ./$<

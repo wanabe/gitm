@@ -4,8 +4,12 @@
 package gitm
 
 import (
+	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -219,4 +223,84 @@ var fileDescriptor_fbd2cb2805ec62ec = []byte{
 	0x73, 0xf5, 0xcb, 0x13, 0xf3, 0x12, 0x93, 0x52, 0xc1, 0xd1, 0xa1, 0x0f, 0x8b, 0x97, 0x24, 0x36,
 	0xb0, 0x2e, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x62, 0x5f, 0x43, 0x4b, 0xaa, 0x01, 0x00,
 	0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// LogClient is the client API for Log service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type LogClient interface {
+	Get(ctx context.Context, in *LogInput, opts ...grpc.CallOption) (*Commit, error)
+}
+
+type logClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewLogClient(cc *grpc.ClientConn) LogClient {
+	return &logClient{cc}
+}
+
+func (c *logClient) Get(ctx context.Context, in *LogInput, opts ...grpc.CallOption) (*Commit, error) {
+	out := new(Commit)
+	err := c.cc.Invoke(ctx, "/gitm.protobuf.Log/get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LogServer is the server API for Log service.
+type LogServer interface {
+	Get(context.Context, *LogInput) (*Commit, error)
+}
+
+// UnimplementedLogServer can be embedded to have forward compatible implementations.
+type UnimplementedLogServer struct {
+}
+
+func (*UnimplementedLogServer) Get(ctx context.Context, req *LogInput) (*Commit, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+
+func RegisterLogServer(s *grpc.Server, srv LogServer) {
+	s.RegisterService(&_Log_serviceDesc, srv)
+}
+
+func _Log_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LogServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gitm.protobuf.Log/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LogServer).Get(ctx, req.(*LogInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Log_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "gitm.protobuf.Log",
+	HandlerType: (*LogServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "get",
+			Handler:    _Log_Get_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "api/gitm.proto",
 }
