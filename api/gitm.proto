@@ -4,6 +4,7 @@ option go_package = "github.com/wanabe/gitm/api/gitm";
 
 service Log {
   rpc get(LogIterator) returns (LogIterator) {}
+  rpc init(LogIterator) returns (LogIterator) {}
 }
 
 message Object {

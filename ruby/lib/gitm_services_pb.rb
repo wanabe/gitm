@@ -16,6 +16,7 @@ module Gitm
         self.service_name = 'gitm.protobuf.Log'
 
         rpc :get, LogIterator, LogIterator
+        rpc :init, LogIterator, LogIterator
       end
 
       Stub = Service.rpc_stub_class
