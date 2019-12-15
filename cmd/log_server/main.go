@@ -21,9 +21,9 @@ func fatalIfError(err error, format string) {
 	log.Fatalf(format, err)
 }
 
-func (s *server) Get(ctx context.Context, req *pb.LogRequest) (*pb.Commit, error) {
+func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator, error) {
 	path := "./"
-	repo := req.Repository
+	repo := iter.Repository
 	if (repo != nil) {
 		if (repo.Path != "") {
 			path = repo.Path
@@ -42,7 +42,8 @@ func (s *server) Get(ctx context.Context, req *pb.LogRequest) (*pb.Commit, error
 	fatalIfError(walker.Next(oid), "%v")
 	commit, err := r.LookupCommit(oid)
 	fatalIfError(err, "%v")
-	return &pb.Commit{Object: &pb.Object{Hash: commit.Id()[:]}}, nil
+	iter.Commits = append(iter.Commits, &pb.Commit{Object: &pb.Object{Hash: commit.Id()[:]}})
+	return iter, nil
 }
 
 func main() {

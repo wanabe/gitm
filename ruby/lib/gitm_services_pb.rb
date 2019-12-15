@@ -15,7 +15,7 @@ module Gitm
         self.unmarshal_class_method = :decode
         self.service_name = 'gitm.protobuf.Log'
 
-        rpc :get, LogRequest, Commit
+        rpc :get, LogIterator, LogIterator
       end
 
       Stub = Service.rpc_stub_class

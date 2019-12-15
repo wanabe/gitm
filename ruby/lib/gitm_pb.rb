@@ -15,9 +15,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :object, :message, 1, "gitm.protobuf.Object"
       repeated :parents, :message, 2, "gitm.protobuf.Object"
     end
-    add_message "gitm.protobuf.LogRequest" do
+    add_message "gitm.protobuf.LogIterator" do
       optional :repository, :message, 1, "gitm.protobuf.Repository"
-      optional :object, :message, 2, "gitm.protobuf.Object"
+      repeated :pointers, :message, 2, "gitm.protobuf.Object"
+      repeated :commits, :message, 3, "gitm.protobuf.Commit"
     end
   end
 end
@@ -27,6 +28,6 @@ module Gitm
     Object = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.Object").msgclass
     Repository = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.Repository").msgclass
     Commit = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.Commit").msgclass
-    LogRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.LogRequest").msgclass
+    LogIterator = Google::Protobuf::DescriptorPool.generated_pool.lookup("gitm.protobuf.LogIterator").msgclass
   end
 end
