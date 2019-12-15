@@ -7,7 +7,7 @@ service Log {
 }
 
 message Object {
-    string hash = 1;
+    bytes hash = 1;
 }
 
 message Repository {

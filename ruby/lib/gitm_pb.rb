@@ -6,7 +6,7 @@ require 'google/protobuf'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_file("gitm.proto", :syntax => :proto3) do
     add_message "gitm.protobuf.Object" do
-      optional :hash, :string, 1
+      optional :hash, :bytes, 1
     end
     add_message "gitm.protobuf.Repository" do
       optional :path, :string, 1

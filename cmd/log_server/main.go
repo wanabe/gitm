@@ -42,7 +42,7 @@ func (s *server) Get(ctx context.Context, req *pb.LogRequest) (*pb.Commit, error
 	fatalIfError(walker.Next(oid), "%v")
 	commit, err := r.LookupCommit(oid)
 	fatalIfError(err, "%v")
-	return &pb.Commit{Object: &pb.Object{Hash: commit.Id().String()}}, nil
+	return &pb.Commit{Object: &pb.Object{Hash: commit.Id()[:]}}, nil
 }
 
 func main() {
