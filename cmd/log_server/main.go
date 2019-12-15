@@ -3,6 +3,7 @@ import(
 	"log"
 	"net"
 	"context"
+	"bytes"
 
 	"google.golang.org/grpc"
 	"gopkg.in/libgit2/git2go.v27"
@@ -36,13 +37,44 @@ func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator
 	walker, err := r.Walk()
 	fatalIfError(err, "%v")
 	walker.Sorting(git.SortTime)
-	walker.PushGlob("refs/*")
+
+	if len(iter.Pointers) == 0 {
+		refIter, err := r.NewReferenceIterator()
+		fatalIfError(err, "%v")
+		for {
+			ref, err := refIter.Next()
+			if ref == nil {
+				break
+			}
+			fatalIfError(err, "%v")
+			if ref.Type() != git.ReferenceOid {
+				continue
+			}
+			iter.Pointers = append(iter.Pointers, &pb.Object{Hash: ref.Target()[:]})
+		}
+	}
+	for i := range iter.Pointers {
+		oid := git.NewOidFromBytes(iter.Pointers[i].Hash)
+		walker.Push(oid)
+	}
 
 	oid := new(git.Oid)
 	fatalIfError(walker.Next(oid), "%v")
 	commit, err := r.LookupCommit(oid)
 	fatalIfError(err, "%v")
-	iter.Commits = append(iter.Commits, &pb.Commit{Object: &pb.Object{Hash: commit.Id()[:]}})
+
+	hash := oid[:]
+	iter.Commits = append(iter.Commits, &pb.Commit{Object: &pb.Object{Hash: hash}})
+	for i := 0; i < len(iter.Pointers); i++ {
+		if (bytes.Equal(hash, iter.Pointers[i].Hash)) {
+			iter.Pointers = append(iter.Pointers[:i], iter.Pointers[i+1:]...)
+			i--
+		}
+	}
+	count := commit.ParentCount()
+	for j := uint(0); j < count; j++ {
+		iter.Pointers = append(iter.Pointers, &pb.Object{Hash: commit.ParentId(j)[:]})
+	}
 	return iter, nil
 }
 
