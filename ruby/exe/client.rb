@@ -1,6 +1,8 @@
 require "gitm"
 
 stub = Gitm::Protobuf::Log::Stub.new('localhost:50051', :this_channel_is_insecure)
-commit = stub.get(Gitm::Protobuf::LogIterator.new())
-p commit
-
+iter = stub.init(Gitm::Protobuf::LogIterator.new())
+begin
+  iter = stub.get(iter)
+  p iter.commits.pop
+end until iter.pointers.empty?

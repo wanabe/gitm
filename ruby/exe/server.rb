@@ -14,6 +14,10 @@ class LogServer < Gitm::Protobuf::Log::Service
     iter.commits << Gitm::Protobuf::Commit.new(object: object)
     return iter
   end
+
+  def init(iter, _unused_call)
+    iter
+  end
 end
 
 s = GRPC::RpcServer.new

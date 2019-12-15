@@ -22,7 +22,7 @@ func fatalIfError(err error, format string) {
 	log.Fatalf(format, err)
 }
 
-func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator, error) {
+func repository(iter *pb.LogIterator) (*git.Repository, error) {
 	path := "./"
 	repo := iter.Repository
 	if (repo != nil) {
@@ -33,10 +33,12 @@ func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator
 
 	r, err := git.OpenRepository(path)
 	fatalIfError(err, "%v")
+	return r, nil
+}
 
-	walker, err := r.Walk()
+func (s *server) Init(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator, error) {
+	r, err := repository(iter)
 	fatalIfError(err, "%v")
-	walker.Sorting(git.SortTime)
 
 	if len(iter.Pointers) == 0 {
 		refIter, err := r.NewReferenceIterator()
@@ -53,6 +55,17 @@ func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator
 			iter.Pointers = append(iter.Pointers, &pb.Object{Hash: ref.Target()[:]})
 		}
 	}
+	return iter, nil
+}
+
+func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator, error) {
+	r, err := repository(iter)
+	fatalIfError(err, "%v")
+
+	walker, err := r.Walk()
+	fatalIfError(err, "%v")
+	walker.Sorting(git.SortTime)
+
 	for i := range iter.Pointers {
 		oid := git.NewOidFromBytes(iter.Pointers[i].Hash)
 		walker.Push(oid)
