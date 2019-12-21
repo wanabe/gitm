@@ -17,7 +17,7 @@ type server struct {
 
 func fatalIfError(err error, format string) {
 	if err == nil {
-  	return
+		return
 	}
 	log.Fatalf(format, err)
 }
