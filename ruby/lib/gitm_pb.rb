@@ -19,6 +19,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :repository, :message, 1, "gitm.protobuf.Repository"
       repeated :pointers, :message, 2, "gitm.protobuf.Object"
       repeated :commits, :message, 3, "gitm.protobuf.Commit"
+      optional :num, :int32, 4
     end
   end
 end

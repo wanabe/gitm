@@ -24,4 +24,5 @@ message LogIterator {
   Repository repository = 1;
   repeated Object pointers = 2;
   repeated Commit commits = 3;
+  int32 num = 4;
 }
