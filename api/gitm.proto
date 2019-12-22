@@ -8,20 +8,20 @@ service Log {
 }
 
 message Object {
-    bytes hash = 1;
+  bytes hash = 1;
 }
 
 message Repository {
-    string path = 1;
+  string path = 1;
 }
 
 message Commit {
-    Object object = 1;
-    repeated Object parents = 2;
+  Object object = 1;
+  repeated Object parents = 2;
 }
 
 message LogIterator {
-    Repository repository = 1;
-    repeated Object pointers = 2;
-    repeated Commit commits = 3;
+  Repository repository = 1;
+  repeated Object pointers = 2;
+  repeated Commit commits = 3;
 }
