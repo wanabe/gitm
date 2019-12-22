@@ -59,7 +59,7 @@ func (log *Log) InitWalker() (error) {
 	if err != nil {
 		return err
 	}
-	walker.Sorting(git.SortTime)
+	walker.Sorting(git.SortTime | git.SortTopological)
 
 	for i := range log.Iter.Pointers {
 		oid := git.NewOidFromBytes(log.Iter.Pointers[i].Hash)
@@ -71,9 +71,17 @@ func (log *Log) InitWalker() (error) {
 }
 
 func (log *Log) Get() (error) {
+	n := log.Iter.Num
+	if n == 0 {
+		n = 1
+	}
+	for ; n > 0; n-- {
 	oid := new(git.Oid)
 	err := log.Walker.Next(oid)
 	if err != nil {
+		if git.IsErrorCode(err, git.ErrIterOver) {
+			return nil
+		}
 		return err
 	}
 	commit, err := log.Repository.LookupCommit(oid)
@@ -92,6 +100,7 @@ func (log *Log) Get() (error) {
 	count := commit.ParentCount()
 	for j := uint(0); j < count; j++ {
 		log.Iter.Pointers = append(log.Iter.Pointers, &pb.Object{Hash: commit.ParentId(j)[:]})
+	}
 	}
 	return nil
 }

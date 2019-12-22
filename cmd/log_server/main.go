@@ -23,23 +23,38 @@ func fatalIfError(err error, format string) {
 
 func (s *server) Init(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator, error) {
 	log, err := gitm.NewLog(iter)
-	fatalIfError(err, "%v")
+	if err != nil {
+		consoleLog.Printf("failed to create Log: %v", err)
+		return nil, err
+	}
 
 	err = log.InitPointers()
-	fatalIfError(err, "%v")
+	if err != nil {
+		consoleLog.Printf("failed to initialze pointers: %v", err)
+		return nil, err
+	}
 
 	return log.Iter, nil
 }
 
 func (s *server) Get(ctx context.Context, iter *pb.LogIterator) (*pb.LogIterator, error) {
 	log, err := gitm.NewLog(iter)
-	fatalIfError(err, "%v")
+	if err != nil {
+		consoleLog.Printf("failed to create Log: %v", err)
+		return nil, err
+	}
 
 	err = log.InitWalker()
-	fatalIfError(err, "%v")
+	if err != nil {
+		consoleLog.Printf("failed to initialize Walker: %v", err)
+		return nil, err
+	}
 
 	err = log.Get()
-	fatalIfError(err, "%v")
+	if err != nil {
+		consoleLog.Printf("failed to get Commits: %v", err)
+		return nil, err
+	}
 
 	return log.Iter, nil
 }
