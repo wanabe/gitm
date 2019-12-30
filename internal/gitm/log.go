@@ -76,31 +76,31 @@ func (log *Log) Get() (error) {
 		n = 1
 	}
 	for ; n > 0; n-- {
-	oid := new(git.Oid)
-	err := log.Walker.Next(oid)
-	if err != nil {
-		if git.IsErrorCode(err, git.ErrIterOver) {
-			return nil
+		oid := new(git.Oid)
+		err := log.Walker.Next(oid)
+		if err != nil {
+			if git.IsErrorCode(err, git.ErrIterOver) {
+				return nil
+			}
+			return err
 		}
-		return err
-	}
-	commit, err := log.Repository.LookupCommit(oid)
-	if err != nil {
-		return err
-	}
+		commit, err := log.Repository.LookupCommit(oid)
+		if err != nil {
+			return err
+		}
 
-	hash := oid[:]
-	log.Iter.Commits = append(log.Iter.Commits, &pb.Commit{Object: &pb.Object{Hash: hash}})
-	for i := 0; i < len(log.Iter.Pointers); i++ {
-		if (bytes.Equal(hash, log.Iter.Pointers[i].Hash)) {
-			log.Iter.Pointers = append(log.Iter.Pointers[:i], log.Iter.Pointers[i+1:]...)
-			i--
+		hash := oid[:]
+		log.Iter.Commits = append(log.Iter.Commits, &pb.Commit{Object: &pb.Object{Hash: hash}})
+		for i := 0; i < len(log.Iter.Pointers); i++ {
+			if (bytes.Equal(hash, log.Iter.Pointers[i].Hash)) {
+				log.Iter.Pointers = append(log.Iter.Pointers[:i], log.Iter.Pointers[i+1:]...)
+				i--
+			}
 		}
-	}
-	count := commit.ParentCount()
-	for j := uint(0); j < count; j++ {
-		log.Iter.Pointers = append(log.Iter.Pointers, &pb.Object{Hash: commit.ParentId(j)[:]})
-	}
+		count := commit.ParentCount()
+		for j := uint(0); j < count; j++ {
+			log.Iter.Pointers = append(log.Iter.Pointers, &pb.Object{Hash: commit.ParentId(j)[:]})
+		}
 	}
 	return nil
 }
