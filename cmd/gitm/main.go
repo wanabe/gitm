@@ -11,7 +11,7 @@ import (
 func main() {
 	commit := pb.Commit {
 		Object: &pb.Object {
-			Hash: "4df003e28a16e91e9667c7e6ea5852202820ac67",
+			Hash: []byte("4df003e28a16e91e9667c7e6ea5852202820ac67"),
 		},
 	}
 	out, err := proto.Marshal(&commit)
