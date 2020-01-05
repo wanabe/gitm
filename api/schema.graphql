@@ -1,0 +1,44 @@
+type Object {
+  hash: String!
+}
+
+input ObjectInput {
+  hash: String
+}
+
+type Repository {
+  path: String!
+}
+
+input RepositoryInput {
+  path: String
+}
+
+type Commit {
+  object: Object!
+  parents: [Object]!
+}
+
+input CommitInput {
+  object: ObjectInput
+  parents: [ObjectInput]
+}
+
+type LogIterator {
+  repository: Repository!
+  pointers: [Object]!
+  commits: [Commit]!
+  num: Int!
+}
+
+input LogIteratorInput {
+  repository: RepositoryInput
+  pointers: [ObjectInput]
+  commits: [CommitInput]
+  num: Int
+}
+
+type Query {
+  get(log_iterator: LogIteratorInput): LogIterator
+  init(log_iterator: LogIteratorInput): LogIterator
+}
