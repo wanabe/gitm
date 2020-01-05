@@ -1,7 +1,7 @@
 require "gitm"
 
 stub = Gitm::Protobuf::Log::Stub.new('localhost:50051', :this_channel_is_insecure)
-path = nil
+path = ARGV[0]
 repository = Gitm::Protobuf::Repository.new(path: path)
 iter = Gitm::Protobuf::LogIterator.new(num: 5, repository: repository)
 iter = stub.init(iter)
