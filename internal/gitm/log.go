@@ -21,6 +21,8 @@ func NewLog(iter *pb.LogIterator) (*Log, error) {
 	if (repo != nil) {
 		if (repo.Path != "") {
 			path = repo.Path
+		} else {
+			repo.Path = path
 		}
 	}
 
