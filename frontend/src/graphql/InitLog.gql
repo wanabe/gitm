@@ -1,0 +1,21 @@
+query InitLog {
+  init(
+    log_iterator: {
+      num: 10,
+      repository: { path: "./"}
+    }
+  ) {
+    num
+    pointers {
+      hash
+    }
+    commits {
+      object {
+        hash
+      }
+    }
+    repository {
+      path
+    }
+  }
+}

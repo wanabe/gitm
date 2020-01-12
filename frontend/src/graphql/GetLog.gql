@@ -1,0 +1,12 @@
+query GetLog ($log_iterator: LogIteratorInput) {
+  get(log_iterator: $log_iterator) {
+    num
+    pointers { hash }
+    commits {
+      object { hash }
+    }
+    repository {
+      path
+    }
+  }
+}

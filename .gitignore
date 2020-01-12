@@ -4,3 +4,4 @@
 go.sum
 .bundle
 Gemfile.lock
+/frontend/node_modules
